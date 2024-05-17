@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { useMediaQuery } from "./hooks/useMediaQuery";
+import { useEffect, useState } from "react";
+import { useDebounce } from "./hooks/useDebounce";
 
 const App = () => {
   return (
@@ -9,7 +11,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/useLocalStorage" element={<LocalStorage />} />
         <Route path="/useMediaQuery" element={<MediaQuery />} />
-        <Route path="/useDebounce" element={<p>use debounce</p>} />
+        <Route path="/useDebounce" element={<Debounce />} />
         <Route path="/useFetch" element={<p>use fetch</p>} />
         <Route path="/useToggle" element={<p>use toggle</p>} />
       </Routes>
@@ -63,6 +65,33 @@ const MediaQuery = () => {
     <h1>This is mobile query</h1>
   ) : (
     <h1>This is desktop query</h1>
+  );
+};
+
+const Debounce = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [data, setData] = useState([]);
+  const debounceSearchTerm = useDebounce(searchTerm, 1000);
+
+  useEffect(() => {
+    if (debounceSearchTerm) {
+      fetch(`https://restcountries.com/v3.1/name/${debounceSearchTerm}`)
+        .then((response) => response.json())
+        .then((result) => setData(result))
+        .catch((error) => console.error("Error fetching data:", error));
+    }
+  }, [debounceSearchTerm]);
+
+  return (
+    <div>
+      <input type="text" onChange={(e) => setSearchTerm(e.target.value)} />
+      {data.length > 0 &&
+        data.map((val) => (
+          <ul>
+            <li>{val?.name?.common}</li>
+          </ul>
+        ))}
+    </div>
   );
 };
 
