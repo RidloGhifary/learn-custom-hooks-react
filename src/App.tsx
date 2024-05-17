@@ -5,6 +5,7 @@ import { useMediaQuery } from "./hooks/useMediaQuery";
 import { useEffect, useState } from "react";
 import { useDebounce } from "./hooks/useDebounce";
 import { useFetch } from "./hooks/useFetch";
+import { useToggle } from "./hooks/useToggle";
 
 const App = () => {
   return (
@@ -15,7 +16,7 @@ const App = () => {
         <Route path="/useMediaQuery" element={<MediaQuery />} />
         <Route path="/useDebounce" element={<Debounce />} />
         <Route path="/useFetch" element={<Fetch />} />
-        <Route path="/useToggle" element={<p>use toggle</p>} />
+        <Route path="/useToggle" element={<Toggle />} />
       </Routes>
     </BrowserRouter>
   );
@@ -111,6 +112,17 @@ const Fetch = () => {
           <li>{x.name.common}</li>
         ))}
       </ul>
+    </div>
+  );
+};
+
+const Toggle = () => {
+  const [isModalOpen, setModal] = useToggle(false);
+
+  return (
+    <div>
+      <button onClick={setModal}>{isModalOpen ? "Close" : "Open"}</button>
+      <h1>{isModalOpen ? "Hallo" : "Hei sorry we are unavailable"}</h1>
     </div>
   );
 };
