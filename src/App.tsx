@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { useMediaQuery } from "./hooks/useMediaQuery";
 import { useEffect, useState } from "react";
 import { useDebounce } from "./hooks/useDebounce";
+import { useFetch } from "./hooks/useFetch";
 
 const App = () => {
   return (
@@ -12,7 +14,7 @@ const App = () => {
         <Route path="/useLocalStorage" element={<LocalStorage />} />
         <Route path="/useMediaQuery" element={<MediaQuery />} />
         <Route path="/useDebounce" element={<Debounce />} />
-        <Route path="/useFetch" element={<p>use fetch</p>} />
+        <Route path="/useFetch" element={<Fetch />} />
         <Route path="/useToggle" element={<p>use toggle</p>} />
       </Routes>
     </BrowserRouter>
@@ -91,6 +93,24 @@ const Debounce = () => {
             <li>{val?.name?.common}</li>
           </ul>
         ))}
+    </div>
+  );
+};
+
+const Fetch = () => {
+  const { data, error, loading } = useFetch(
+    "https://restcountries.com/v3.1/independent?status=true"
+  );
+
+  if (loading) return <p>loading</p>;
+  if (error) return <p>Something went wrong</p>;
+  return (
+    <div>
+      <ul>
+        {(data || [])?.map((x: any) => (
+          <li>{x.name.common}</li>
+        ))}
+      </ul>
     </div>
   );
 };
