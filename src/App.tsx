@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { useLocalStorage } from "./hooks/useLocalStorage";
+import { useMediaQuery } from "./hooks/useMediaQuery";
 
 const App = () => {
   return (
@@ -7,7 +8,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/useLocalStorage" element={<LocalStorage />} />
-        <Route path="/useMediaQuery" element={<p>use media query storage</p>} />
+        <Route path="/useMediaQuery" element={<MediaQuery />} />
         <Route path="/useDebounce" element={<p>use debounce</p>} />
         <Route path="/useFetch" element={<p>use fetch</p>} />
         <Route path="/useToggle" element={<p>use toggle</p>} />
@@ -53,6 +54,15 @@ const LocalStorage = () => {
       <input value={name} onChange={(e) => setName(e.target.value)} />
       <p>Hello, {name}</p>
     </div>
+  );
+};
+
+const MediaQuery = () => {
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  return isMobile ? (
+    <h1>This is mobile query</h1>
+  ) : (
+    <h1>This is desktop query</h1>
   );
 };
 
